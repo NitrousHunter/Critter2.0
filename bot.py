@@ -2,22 +2,19 @@
 import os
 
 import discord
-from dotenv import load_dotenv
 from discord.ext import commands
 
 from string_dec import *
 from functions import *
 
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
-GUILD = os.getenv('DISCORD_GUILD')
+TOKEN = DISCORD_TOKEN
+GUILD = DISCORD_GUILD
 
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='c!',intents=intents)
 
 maintenance = 0
-menu_wait = 1
 
 @bot.event
 async def on_ready():

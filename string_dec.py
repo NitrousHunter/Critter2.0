@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 BOTNAME = "Test_Bot"
+DISCORD_TOKEN="ODA4NzAwMzAzODc2NDIzNzIy.YCKW2Q.Jrkgn-2FH1uz88yasYFZPk5ZxHo"
+DISCORD_GUILD="Eli and Sam test Bots"
 
 commands_list = ['help','inventory','balance','shop','buy','sell','gift','exchange',
             'tenant','suggest','bug','join','leave','ping','key','investigate',
