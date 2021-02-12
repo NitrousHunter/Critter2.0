@@ -41,13 +41,11 @@ async def on_member_join(member):
         f'{member.name}' + welcome_str
     )
 
-
 # HELP COMMAND
 @bot.command(pass_context=True)
 async def help(ctx):
     global maintenance
     if maintenance:
-        global menu_wait
         curr_page=1
         commands_dict = get_commands(curr_page)
         max_page=6
@@ -67,7 +65,8 @@ async def help(ctx):
         while 1:
             try:
                 reaction, user = await bot.wait_for('reaction_add',timeout=10)
-                if user.name != BOTNAME:
+                react_author = user.name+"#"+user.discriminator
+                if react_author == str(ctx.message.author): #only the user who asked for help can change the page
                     curr_page = emoji_numbers.index(reaction.emoji) + 1
                     commands_dict = get_commands(curr_page)
                     #print ("Bot should change to page " + str(curr_page) + " for user " +user.name) # Debug statement
@@ -82,13 +81,13 @@ async def help(ctx):
                             value=commands_dict[key]+"\n-",inline=False)
                     embed.set_footer(text=help_footer+"| Current Page "+str(curr_page)+"/"+str(max_page))
                     await help.edit(embed=embed)
+                    await help.remove_reaction(reaction,user)
             except: #Most likely Timeout Error Waiting for a reaction
                 embed.set_footer(text=help_footer_done+"| Current Page "+str(curr_page)+"/"+str(max_page))
                 await help.edit(embed=embed)
                 return
     else: #If Maintenance
         await ctx.send(maintenance_block_text)
-
 
 @bot.command(name='tenant',  help="tenant help")
 async def critter_tenant(ctx,):
@@ -98,14 +97,12 @@ async def critter_tenant(ctx,):
     else:
         await ctx.send(maintenance_block_text)
 
-@bot.command(name='tenant add', help="tenant add help")
-async def critter_tenant_add(ctx):
-    global maintenance
+@bot.command(name='ping') #Base functionality is there, but it needs proper formatting
+async def ping(ctx):
+    await ctx.send('Pong! {0}ms'.format(round(bot.latency*1000)))
 
 
-
-
-@bot.command(name='maintenance')
+@bot.command(name='maintenance') #Base functionality is there, but it needs proper formatting
 async def critter_maintenance(ctx,value=2):
     global maintenance
     if int(value) == 1:
