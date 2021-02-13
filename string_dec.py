@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 BOTNAME = "Test_Bot"
-DISCORD_TOKEN="ODA4NzAwMzAzODc2NDIzNzIy.YCKW2Q.Jrkgn-2FH1uz88yasYFZPk5ZxHo"
+DISCORD_TOKEN=""
 DISCORD_GUILD="Eli and Sam test Bots"
+DISCORD_MOD_CHANNEL=810158590866096188
 
 commands_list = ['help','inventory','balance','shop','buy','sell','gift','exchange',
             'tenant','suggest','bug','join','leave','ping','key','investigate',
@@ -68,7 +69,7 @@ commands_dict_4 = {
         'optional. Remember to account for any curses the character may be ' +
         "afflicted with. Make sure to identify the user you're rolling for " +
         " (but don't use an @) posted either before or after this command.",
-    'horror_<"horror_tyype">_<"courage_level">_<"optional_item">_<"optional_curses">':
+    'horror_<"horror_type">_<"courage_level">_<"optional_item">_<"optional_curses">':
         'Use this command to fight a horror. "Horror type" and "courage level" ' +
         'are always required. Add in items upon request, and curses if a tenant' +
         "has any. If a tenant has a curse, but is not battling with items, leave " +
@@ -131,6 +132,10 @@ help_footer_done = 'Too slow! Enter c!help again to see another page '
 
 welcome_str = ", AWAKEN MY MASTERS!"
 invalid_command = "I don't know how to do that, maybe try c!help?"
+missed_argument = "You cannot leave the "
+missed_argument_2 = " blank."
+serious_error = "Something just went really wrong; I'll let a mod know"
+serious_error_mods = "I don't know what happened. Get in touch with my creators"
 
 
 maintenance_off_text = "Taking the server down for maintenance..."
