@@ -66,6 +66,8 @@ def find_args(function):
         args_text = 'maintenance number'
     elif(fun_name == "injury"):
         args_text = 'tenant name or injury category'
+    elif(fun_name == "info"):
+        args_text = 'item(s), blessing(s), or curse(s) name(s)'
     else:
         args_text = " ERROR "
     return args_text
@@ -222,6 +224,21 @@ def grouper(n, iterable, fillvalue=None):
     args = [iter(iterable)] * n
     return it.zip_longest(fillvalue=fillvalue, *args)
 
+def combine_like_entries(tuples): #Combines tuples in list if item,quantity pairs
+    items = [tuple[0].lower() for tuple in tuples]
+    dict = {}
+    for item in items:
+        tmp = []
+        if items.count(item) > 1:
+            tmp = [ind for ind in range(len(items)) if items[ind] == item]
+            quantity = 0
+            for j in range(len(tmp)-1,0,-1):
+                quantity += int(tuples[tmp[j]][1])
+                del tuples[tmp[j]]
+                del items[tmp[j]]
+            tuples[items.index(item)][1] = str(quantity+int(tuples[items.index(item)][1]))
+    return(tuples)
+
 def tablify_list(list_arg): # Takes list and puts them together
     if list_arg:
         grouped_list = list(grouper(2,list_arg,""))
@@ -246,17 +263,23 @@ def run_investigation(thing_found,room_information):
     if thing_found.lower() == "special":
         # If you found a "special" choose 1 at random
         find_pool = [entry[0] for entry in room_information if entry[0] != '']
-        return random.choice(find_pool)
+        if find_pool:
+            return random.choice(find_pool)
+        else:
+            return -1
     elif thing_found.lower() == "horror":
         # If you found a "horror" roll to see what kind/if you encounter a horror
-        find_pool = [entry[1] for entry in room_information if entry[1] != '']
-        find_probs = [entry[2] for entry in room_information if entry[2] != '']
-        roll = random.randint(100,10000)/100
-        for ind in range(len(find_probs)):
-            roll -= float(find_probs[ind])
-            if roll <= 0:
-                break
-        return find_pool[ind]
+        find_pool = [entry[1] for entry in room_information if len(entry) > 1 and entry[1] != '']
+        find_probs = [entry[2] for entry in room_information if len(entry) > 1 and entry[2] != '']
+        if find_pool and find_probs:
+            roll = random.randint(100,10000)/100
+            for ind in range(len(find_probs)):
+                roll -= float(find_probs[ind])
+                if roll <= 0:
+                    break
+            return find_pool[ind]
+        else:
+            return -1
     elif thing_found.lower() == "pokemon":
         # If you found a "pokemon" choose 1 at random (account for seasons)
         season = check_season()
@@ -269,17 +292,23 @@ def run_investigation(thing_found,room_information):
                     find_pool.append(room_information[ind][5])
             else:
                 break
-        return random.choice(find_pool)
+        if find_pool:
+            return random.choice(find_pool)
+        else:
+            return -1
     elif thing_found.lower() == "item":
         # If you found an "item" roll to see what kind/if you get one
-        find_pool = [entry[3] for entry in room_information if entry[3] != '']
-        find_probs = [entry[4] for entry in room_information if entry[4] != '']
-        roll = random.randint(100,10000)/100
-        for ind in range(len(find_probs)):
-            roll -= float(find_probs[ind])
-            if roll <= 0:
-                break
-        return find_pool[ind]
+        find_pool = [entry[3] for entry in room_information if len(entry) > 3 and entry[3] != '']
+        find_probs = [entry[4] for entry in room_information if len(entry) > 3 and entry[4] != '']
+        if find_pool and find_probs:
+            roll = random.randint(100,10000)/100
+            for ind in range(len(find_probs)):
+                roll -= float(find_probs[ind])
+                if roll <= 0:
+                    break
+            return find_pool[ind]
+        else:
+            return -1
     elif thing_found.lower() == "nothing":
         return "nothing"
     else:

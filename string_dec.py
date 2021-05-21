@@ -4,7 +4,7 @@ BOTNAME = "Critter 2.0"
 dev_id = "191396253299507210" #ID for developer (Gets errors pmed to them)
 
 #Discord Server Info
-DISCORD_TOKEN="" #This will change if the code gets posted publicly
+DISCORD_TOKEN="NOPE" #This will change if the code gets posted publicly
 DISCORD_GUILD="Chai Château: Redux" #Primary Server Name
 DISCORD_MOD_CHANNEL=642810772107427861 #Gets suggestions
 DISCORD_WELCOME_CHANNEL=616646216628830222 #Posts welcome message
@@ -14,12 +14,23 @@ DISCORD_SEASON_CHANNEL=644179727677915146 #Announces Season Changes
 DISCORD_GENERAL_INTRO_CHANNEL=639115120798203909 #Links in welcome message
 DISCORD_CHANNEL_DIR_CHANNEL=686009546270834740 #Links in join and leave
 DISCORD_QUESTIONS_CHANNEL=636581490825756684 #Links in gift delivery error
+DISCORD_HEADCANNON_CHANNEL=734894005015543959 #Links in roles text
+DISCORD_ANNOUNCEMENTS_CHANNEL=616657476300963840 #Links in roles text
+DISCORD_RAIDS_CHANNEL=655821828446486528 #Links in roles text
+DISCORD_SPOILERS_CHANNEL=637306847329779722 #Links in roles text
 
-DISCORD_BIRTHDAYS_GROUP=807839150501003264 #@'s Birthdays Group in Birthdays
-DISCORD_INVESTIGATORS_GROUP=809288411721629757 #@'s Investigators Group in Investigators
+DISCORD_BIRTHDAYS_GROUP=644363508682850314 #@'s Birthdays Group in Birthdays
+DISCORD_INVESTIGATORS_GROUP=644363679244091393 #@'s Investigators Group in Investigators
 
 channel_directory_link = "<#"+str(DISCORD_CHANNEL_DIR_CHANNEL)+">"
 channel_questions_link = "<#"+str(DISCORD_QUESTIONS_CHANNEL)+">"
+channel_birthday_link = "<#"+str(DISCORD_BIRTHDAY_CHANNEL)+">"
+channel_investigation_link = "<#"+str(DISCORD_INVESTIGATION_CHANNEL)+">"
+channel_spoilers_link = "<#"+str(DISCORD_SPOILERS_CHANNEL)+">"
+channel_announcements_link = "<#"+str(DISCORD_ANNOUNCEMENTS_CHANNEL)+">"
+channel_raid_link = "<#"+str(DISCORD_RAIDS_CHANNEL)+">"
+channel_headcannons_link = "<#"+str(DISCORD_HEADCANNON_CHANNEL)+">"
+
 target_birthdays_grp = "<@&"+str(DISCORD_BIRTHDAYS_GROUP)+">"
 target_investigators_grp = "<@&"+str(DISCORD_INVESTIGATORS_GROUP)+">"
 
@@ -30,10 +41,14 @@ silver_medal_emoji = "<:second:816095462457081916>"
 bronze_medal_emoji = "<:third:816095462498369586>"
 hm_star_emoji = "<:hmstar:816095715323150358>"
 horror_bonk_emoji = '<:horrorbonk:817531789135970374>'
+critter_cry_emoji = '<:crittersob:821532324541497344>'
+critter_shook_emoji = '<a:crittershook:834807213746683914>'
+critter_blush_emoji = '<:critterblush:841488102152732732>'
 
 #Sheets API Info
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets'] #I think this is neccessary?
-CRITTER_CONFIG_ID="1t9yb9Wu4yKQBp6x3zgULOVrP6qsYe2Spfzr8zaF6UA8" #Critter config DB
+CRITTER_CONFIG_ID="1t9yb9Wu4yKQBp6x3zgULOVrP6qsYe2Spfzr8zaF6UA8" #Real Critter config DB
+#CRITTER_CONFIG_ID="1njrD3C4X_XatOo796_ASjnb31CgENx9dkWWT4XvyNP4"
 SERVER_INVENTORY_DB="1VPCwp7lfDRKGRmRPq6u9LtTQEzlFpblFssnt30vvg7g" #Real inventory DB
 #SERVER_INVENTORY_DB="1e7qavkpJOjUCJ5slD6TCvPBUhEglQ4ILVAfV0Cl4EtU" #Test inventory DB
 
@@ -99,11 +114,18 @@ swanna_image = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e79415
 # DICTIONARIES AND LISTS ------------------------------------------------------------------------------------------
 # HELP Dictionary (All available commands and explanations of them) by page
 help_dict_1 = { #Available to GHOSTS and up
-    'help':
-        'Review all of ' + BOTNAME + "'s available commands and how to use them",
+    'help_<"optional_page_num">':
+        'Review all of ' + BOTNAME + "'s available commands and how to use them."+
+        " Optionally, enter a specific page number to start on that page",
     'tenant':
-        "Roll for a random tenant, which includes both a preview image and link"+
-        " to the tenant's application",
+        "Roll for a random staff NPC, which includes both a preview image and link"+
+        " to the staff NPC's information",
+    'NEWstaff':
+        "Roll for a random staff member, which includes both a preview image and"+
+        " link to the NPC's application",
+    'roles_<"optional_page_num">':
+        'Display a list of all server roles you can join, along with a descripti'+
+        'on of each. Optionally, enter a specific page number to start on that page',
     'join_<"role_name">':
         "Add yourself to select roles (check the "+channel_directory_link+" for a "+
         "list of current server roles)",
@@ -114,7 +136,9 @@ help_dict_1 = { #Available to GHOSTS and up
         'Allows you to play ping-pong with ' + BOTNAME + ' (and check his response time, too)'
 }
 help_dict_2 = { #Available to TENANTS and up
-    'inventory': 'Quickly view your personal Member Database inventory',
+    'inventory_<"optional_page_num">': 'Quickly view your personal Member Datab'+
+    'ase inventory. Optionally, enter a specific page number to start on that page',
+    'inventory_sort': 'Sort your inventory alphabetically (A ➞ Z)',
     'balance': 'View your current PD and Shard balance',
     'balance_top': 'View a leaderboard showing members with the highest PD balance',
     'balance_critter': "View "+BOTNAME+"'s balance (collected via gift taxes!)",
@@ -127,21 +151,25 @@ help_dict_3 ={ #Available to TENANTS and up
         "Sell items to the shop and receive 1/4th the item's value in return " +
         "(currency type gained will depend on the item sold). You can also trash"+
         " unsellable items from your inventory with this command",
+    'NEWinfo_<"item(s),_blessing(s),_and/or_curse(s)">':
+        "Look up any item, curse, or blessing (separate multiple keywords with a"+
+        " comma). View a description for the requested keyword(s), along with t"+
+        "he various possible method(s) for obtaining them",
     'gift_<@user>_<"item_name">_<"item_quantity">':
         'Allows you to gift another member any non-Premium/special item in' +
         ' your main inventory. Does not apply to items located in tenant '+
         'inventories. PD is considered an "item" for the sake of gifting',
-    'NEWgift_special_<@user>_<"item_name">_<"bag_type">':
+    'gift_special_<@user>_<"item_name">_<"bag_type">':
         "Gift another member any specialty item in your inventory via a gift "+
         "bag or jumbo gift bag. If gifting shards, you must specify the item as "+
-        '"# Shards" (even in the case of 1 Shard).'
+        '"# Shards" (even in the case of 1 Shard)'
 }
 
 help_dict_4 = { #Available to TENANTS and up
-    'NEWgift_special_menu':
+    'gift_special_menu':
         "Check which items currently in your personal inventory can be gifted "+
         "with gift bags or jumbo gift bags",
-    'NEWgift_special_menu_<"bag_type">':
+    'gift_special_menu_<"bag_type">':
         'View a list of all items that can be gifted with the specified gift '+
         'bag type ("gift bag" or "jumbo gift bag")',
     'exchange_shards_<"quantity">':
@@ -172,7 +200,7 @@ help_dict_5 = { #Available to INTERNS and up
         " will re-roll a new curse for the tenant using all available curses " +
         " that the specified horror can afflict. Make sure to identify the user"+
         " you're rolling for (but don't use an @) before executing this command",
-    'NEWraid_<"courage_level">_<"optional_blessings">_<"optional_curses">':
+    'raid_<"courage_level">_<"optional_blessings">_<"optional_curses">':
         'Roll a calculated damage output for a tenant fighting in a raid.'+
         ' "Courage level" is always required. Add in blessings and curses if'+
         " a tenant has any. Make sure to identify the user you're rolling for"+
@@ -206,9 +234,9 @@ help_dict_7 = { #Available to MODS and up
     'inventory_view_<@user>':
         'Allows you to view the current Member Database tab name for this user,'+
         ' stored in ' + BOTNAME,
-    'maintenance_<0_or_1>':
-        'This will allow you to disable (0) or enable (1) ' + BOTNAME +
-        ' across the entire server, preventing anyone from using commands',
+    'NEWinventory_clean_<@user>':
+        'Allows you to clean up the inventory of the specified user by removing'+
+        ' blank rows and making all items Title Case',
     'injury_<"random",_or_a_specific_tenant_name">_<"injury_category">':
         'Select either a random or specific tenant and roll them an ' +
         'injury from the chosen category (categories: minor, moderate, severe'+
@@ -223,6 +251,9 @@ help_dict_8 = { #Available to MODS and up
     'key_delete_<@user>_<"quantity">':
         "Remove the specified number of tarnished room keys from a member's total"+
         " amount (useful in the case of an accidental purchase)",
+    'maintenance_<0_or_1>':
+                'This will allow you to disable (0) or enable (1) ' + BOTNAME +
+                ' across the entire server, preventing anyone from using commands',
     'NEWcomms_<"channel_or_announcement_type">_<"optional_message">':
         "Allows "+BOTNAME+' to manually make up for any missed announcements. Ent'+
         'er "investigation," "season," or "birthday" to send a belated auto-format'+
@@ -231,12 +262,13 @@ help_dict_8 = { #Available to MODS and up
         "nel (don't include quotes surrounding the message, or they'll be included)"
 }
 
+
 #Sheet Tab Information
 non_inv_tabs = [
 "Tenant","Shop","Gachapon","Pokemon Hatches","Injuries","JoinableRoles",\
 "Variable Config","Investigation Config","Horror Config","Horror Item \
 Reward Pool","Investigation Item Reward Pool","User Info","Raid Config",
-"Sell/Trash-Only Items","Gifting Items"
+"Sell/Trash-Only Items","Gifting Items","Info (Glossary of Terms)","Staff"
 ]
 non_member_tabs = [ "Directory", "Critter" ]
 
@@ -301,15 +333,17 @@ valid_hatch_args = ["color-swapped","Delta","patterned","fusion"]
 
 #SHEET LOCATIONS OF USEFUL INFORMATION ------------------------------------------------------------
 #Page 1 Commands
-TENANT_LIST = "Tenant!A2:E200"
-ROLES_LOC = "JoinableRoles!A2:C15"
+TENANT_LIST = "Tenant!A2:E"
+STAFF_LIST = "Staff!A2:C"
+ROLES_LOC = "JoinableRoles!A2:C"
 
 #Inventory/Balance Commands
 USER_INFO_LOC = "User Info!A2:C"
-INVENTORY_LOC = "!C9:D56"
+INVENTORY_LOC = "!C9:D"
 PD_BAL_LOC = "!D4:D4"
 SHARD_BAL_LOC = "!D5:D5"
 CRITTER_BALANCE_LOC = "Critter!W5:W5"
+CRITTER_INFO_LOC = "Info (Glossary of Terms)!A2:D"
 
 #Shop Command
 SHOP_PAGE1 = "SHOP!A2:C"
@@ -400,31 +434,53 @@ it!\n\n**Protip**: I only require quotes around arguments that include spaces."
 unknown_user = "I don't know who you're referring to; next time try "+'"@"ing \
 someone directly!'
 missed_argument = "You cannot leave the %s blank."
-wrong_argument = "I did not understand what you entered for "
-serious_error = "Hmm, I don't know what happened.\n\nThe dev team has been \
-notified and will look into it right away."
+serious_error = "Hmm, I encountered a problem.\n\nThe dev team has been \
+notified and will look into it right away, but it was most likely my fault. \
+Try your command again, I think I can get it this time."
 out_of_element_txt = ("Oops, I can't do that here.\n\nIf you'd like to use my \
 commands, make sure you're in the **%s** server!" % DISCORD_GUILD)
+need_space_txt="In order to properly execute this command, you'll need to inclu\
+de at least one space between each included argument."
+server_issue_txt="I am having some trouble right now. You didn't do anything wro\
+ng, but please wait a minute or two and try again. I'm a little confused right \
+now. " + critter_cry_emoji
+inventory_issue_text="Please have a mod take a look at your inventory; I see so\
+mething wrong in there and I'm not sure why."
 
 #Tenant Command
 tenant_text = "You received **[%s](%s)**!"
+staff_text = "You received **[%s](%s)**!"
 
 #Role Commands (join and leave)
 join_text = 'You successfully joined the following role(s): **%s**'
-unjoin_text = "You tried to join the following role(s), but you're already in them: **%s**"
+unjoin_text = "You tried to join the following role(s), but you're already in \
+them: **%s**"
 leave_text = 'You successfully left the following role(s): **%s**'
 no_role = "You don't have the **%s** role, so you can't leave it."
+role_descr_text = "At your current server level, **%s**, you can join the follow\
+ing roles:\n---------------------------------------------------------------------------\n"
+roles_footer_done = "Too slow; enter c!roles again to see another page "
+roles_pronouns_page = "These roles make it easy for members to know your \
+preferred pronouns\n\n"
+roles_other_page = "These roles are tied to activities throughout the server\n\n"
+dont_do_here = "I only understand the roles in **%s**, so that command does not\
+ work here! "+critter_cry_emoji
 
 #Help Command
-help_descr_text = "Click on the # reaction to flip through the pages\n------------------------------------------------------"
+help_descr_text = "Click on the # reaction to flip through the pages\
+\n------------------------------------------------------\n\n"
 help_footer = 'Click on the # reaction to flip through the pages '
 help_footer_done = "Too slow; enter c!help again to see another page "
 page_error_text = "That's not a valid page number!"
 
 #Inventory Commands
-inventory_add_text = "%s's inventory tab name (**%s**) was successfully added to "+BOTNAME+" DB."
-inventory_update_text = "%s's inventory tab name was successfully updated from **%s** to **%s** in "+BOTNAME+" DB."
+inventory_add_text = "%s's inventory tab name (**%s**) was successfully \
+added to "+BOTNAME+" DB."
+inventory_update_text = "%s's inventory tab name was successfully \
+updated from **%s** to **%s** in "+BOTNAME+" DB."
 inventory_view_text = "%s's tab name is currently saved as **%s**!"
+inventory_clean_text = "%s's inventory has been successfully cleaned!"
+inventory_sort_text = BOTNAME+" has successfully sorted your inventory!"
 yes_inventory_tab = "I already have an inventory tab for %s."
 inventory_titles = '\n║ {:24s} ║ {:10s} ║\n'.format('"Item"','"Quantity"')
 table_linebreak = '╠══════════════════════════╬════════════╣'
@@ -434,6 +490,7 @@ inventory_header = table_starter+inventory_titles+table_linebreak
 table_footer = "Click on the # reaction to flip through the pages | Current Page %i/%i"
 inventory_footer_done = "Too slow; enter c!inventory again to see another page | Current Page %i/%i"
 empty_inventory = "It looks like your inventory is empty."
+inventory_page_lim = "That's not a valid page number! Your inventory is only **%i** pages!"
 
 #Balance Commands
 balance_text = "**PokéDollars**: %s\n**Shard(s)**: %s"
@@ -472,6 +529,12 @@ item_delete_question="The shop won't buy that item, but would you like to delete
 item_delete_confirm = "You deleted **%s** **%s**"
 item_delete_reject = "You decided not to delete any **%s**"
 delete_timeout = 'Too slow; enter `c!sell` again to start over.'
+
+#Info Command
+info_descr_text = "Information about the requested item/curse/blessing is shown \
+below\n-------------------------------------------------------------------------------\n\n"
+bad_info_text = "I'm not sure what you meant by **%s**"
+no_good_info_text = "I didn't find anything that matched what you asked me about "+critter_cry_emoji+"\n\n"
 
 #Gift Command
 banned_item_text = "Although all information was entered correctly, %s can't be gifted with this command."
@@ -553,6 +616,10 @@ tunately, after a moment, it seems like the Swanna decides actions speak louder\
  than stares. It honks once more and charges at you, beak snapping furiously as\
  it quickly chases you away.\n\nIt's a lovely day at the pond, but you encounte\
 r a horrible Swanna."
+inf_loop_txt = "I got stuck in a loop! Please verify that the item and room com\
+bination you entered are compatible. If they are, re-execute the command and I'l\
+l try again."
+unknown_location_name = "**%s** isn't a valid investigation area!"
 
 #Horror Command
 invalid_horr_item = "It looks like **%s** isn't an item that will affect horrors!"
@@ -634,11 +701,13 @@ el-name"). Otherwise, I only support late announcements for birthdays, investiga
 tions, or season changes!'
 
 #Automatic Announcements (Seasons, Birthday,Investigations are Open)
-season_chg_text = "You sense a shift in the air, knowing instinctively that **%s** has drawn to a close.\n\n**%s** has begun!"
+season_chg_text = "You sense a shift in the air, knowing instinctively that \
+**%s** has drawn to a close.\n\n**%s** has begun!"
 one_birthday_text = "Get ready to celebrate, because there's one birthday this week! 🎉🎂\n\n"
 many_birthday_text = "Get ready to celebrate, because there's more than one birthday this week! 🎉🎂\n\n"
 birthday_text = "**%s's** birthday is **%s**!\n"
 birth_footer_text = "Be sure to wish them a happy birthday, and consider gifting\
  them something to commemorate the occasion!"
 investigations_open_text = "Investigations are now open! 🔎\n\nPay a visit to \
-the [investigation journal](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to see what you find!"
+the [investigation journa](https://www.deviantart.com/chaistaff/journal/Investigation-842664943)\
+[l](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to see what you find!"
